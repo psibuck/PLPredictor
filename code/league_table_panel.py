@@ -14,6 +14,7 @@ class LeagueTable(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.num_teams = 0
+        self.edited = False
         self.standings = []
 
         self.table = tk.Frame(self)
@@ -30,7 +31,10 @@ class LeagueTable(tk.Frame):
         add_team_button = tk.Button(button_frame, text="Add Team", command=self.add_team)
         add_team_button.grid(row=0, column=2)  
 
-        print("test")
+        self.save_button = tk.Button(button_frame, text="Save Changes", command=self.save_changes)
+        self.save_button.grid(row=0,column=3)
+        self.save_button["state"] = "disabled"
+
         if path.exists( filepath ):
             self.read_standings()
             self.setup_table()
@@ -74,6 +78,7 @@ class LeagueTable(tk.Frame):
                 self.standings.append( line )
     
     def swap_positions(self, pos1, pos2 ):
+        self.enable_save_button()
         copy = self.standings[pos1]
         self.standings[pos1] = self.standings[pos2]
         self.standings[pos2] = copy
@@ -87,9 +92,23 @@ class LeagueTable(tk.Frame):
                 file.write( team )
 
     def add_team(self):
+        self.enable_save_button()
         self.standings.append(self.team_name_entry.get())
         self.team_name_entry.delete(0,'end')
         self.setup_table()
+
+    def enable_save_button(self):
+        self.save_button["state"]= "normal"
+
+    def disable_save_button(self):
+        self.save_button["state"]= "disabled"
+
+    def save_changes(self):
+        self.disable_save_button()
+        save_file = open(filepath, "w+")
+        for line in self.standings:
+            save_file.write(str(line) + "\n")
+        save_file.close()
 
     @staticmethod
     def get_name():
