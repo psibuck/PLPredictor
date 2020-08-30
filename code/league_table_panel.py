@@ -17,42 +17,55 @@ class LeagueTable(tk.Frame):
         self.standings = []
 
         self.table = tk.Frame(self)
-        self.table.grid(row=0,column=0,sticky="nsew")
+        self.table.bg = "blue"
+        self.table.grid(row=1,column=0,sticky="nsew")
 
+        button_frame = tk.Frame(self)
+        button_frame.grid(row=0,column=0,sticky="nsew")
+
+        self.team_name_entry = tk.Entry(button_frame)
+        self.team_name_entry.grid(row=0, column=1)
+        self.team_name_entry.focus()
+
+        add_team_button = tk.Button(button_frame, text="Add Team", command=self.add_team)
+        add_team_button.grid(row=0, column=2)  
+
+        print("test")
         if path.exists( filepath ):
             self.read_standings()
             self.setup_table()
-        else:
-            create_league_button = tk.Button(self, text="Create League")
-            create_league_button.pack(side="top",fill="x",pady=10)
 
     def setup_table(self):
         self.num_teams = 0
         self.table.destroy()
         self.table = tk.Frame(self)
-        self.table.grid(row=0, column=0, sticky="nsew")
+        self.table.configure( background="blue" )
+        self.table.grid(row=1, column=0, sticky="nsew")
 
         for team in self.standings:
             self.num_teams = self.num_teams + 1
 
-            count_label = tk.Label(self.table, text=self.num_teams)
-            count_label.grid(row=self.num_teams, column=1)
+            row = tk.Frame(self.table)
+            row.grid(row=self.num_teams,sticky="ew", pady=5)
+
+            count_label = tk.Label(row, text=self.num_teams)
+            count_label.grid(row=0,column=1)
             if self.num_teams < 5:
                 count_label.configure(background="gold")
             elif self.num_teams > 17:
                 count_label.configure(background="red")
 
-            label = tk.Label(self.table, text=team)
-            label.grid(row=self.num_teams, column=2)
+            label = tk.Label(row, text=team)
+            label.grid(row=0,column=2)
 
             if self.num_teams > 1:
                 swap_up_command = partial(self.swap_positions, self.num_teams - 1, self.num_teams - 2)
-                up_button = tk.Button(self.table, text="UP", command=swap_up_command)
-                up_button.grid(row=self.num_teams, column=3)
+                up_button = tk.Button(row, text="UP", command=swap_up_command)
+                up_button.grid(row=0,column=3)
             if self.num_teams < len(self.standings):
                 swap_down_command = partial(self.swap_positions, self.num_teams - 1, self.num_teams)
-                down_button = tk.Button(self.table, text="DOWN",command=swap_down_command)
-                down_button.grid(row=self.num_teams, column=4)
+                down_button = tk.Button(row, text="DOWN",command=swap_down_command)
+                down_button.grid(row=0,column=4)
  
     def read_standings(self):
         with open(filepath, 'r' ) as filedata:
@@ -72,6 +85,11 @@ class LeagueTable(tk.Frame):
         if file:
             for team in self.standings:
                 file.write( team )
+
+    def add_team(self):
+        self.standings.append(self.team_name_entry.get())
+        self.team_name_entry.delete(0,'end')
+        self.setup_table()
 
     @staticmethod
     def get_name():
