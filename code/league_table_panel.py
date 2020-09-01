@@ -73,7 +73,16 @@ class LeagueTable(tk.Frame):
                 swap_down_command = partial(self.swap_positions, self.num_teams - 1, self.num_teams)
                 down_button = tk.Button(row, text="DOWN",command=swap_down_command)
                 down_button.grid(row=0,column=4)
- 
+
+            delete_entry_command = partial(self.delete_entry, self.num_teams - 1)
+            delete_button = tk.Button(row, text="Delete", command=delete_entry_command)
+            delete_button.grid(row=0, column=5)
+    
+    def delete_entry(self,pos):
+        self.changes_made_state()
+        self.standings.pop(pos)
+        self.setup_table()
+
     def read_standings(self):
         self.standings = []
         with open(filepath, 'r' ) as filedata:
@@ -115,7 +124,7 @@ class LeagueTable(tk.Frame):
         self.setup_table()
 
     def save_changes(self):
-        self.disable_save_button()
+        self.no_changes_state()
         save_file = open(filepath, "w+")
         for line in self.standings:
             save_file.write(str(line) + "\n")
