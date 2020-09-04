@@ -40,7 +40,6 @@ class Predictor:
         frame = self.frames[panel_name]
         frame.tkraise()
 
-
 def main():
     root = Tk()
     root.title( "Premier League Predictor" )
@@ -50,5 +49,5 @@ def main():
 
     root.configure(background="green")
     root.mainloop()
-
+    
 main()

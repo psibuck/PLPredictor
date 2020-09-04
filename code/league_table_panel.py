@@ -1,10 +1,11 @@
-from tkinter import Frame
+from tkinter import Frame, PhotoImage, Label
 from functools import partial
 import tkinter as tk
 
 import os
 from os import path
 
+data_folder = os.path.dirname(__file__) + '/../data'
 filepath = os.path.dirname(__file__) + '/../data/league_table.txt'
 
 # Draws the current league table to the screen
@@ -16,6 +17,9 @@ class LeagueTable(tk.Frame):
         self.num_teams = 0
         self.edited = False
         self.standings = []
+        self.up_image = PhotoImage( file=(data_folder + '/icons/up-arrow.png')).subsample(25,25)
+        self.down_image = PhotoImage( file=(data_folder + '/icons/down-arrow.png')).subsample(25,25)
+        self.delete_image = PhotoImage( file=(data_folder + '/icons/delete.png')).subsample(25,25)
 
         self.table = tk.Frame(self)
         self.table.bg = "blue"
@@ -67,15 +71,15 @@ class LeagueTable(tk.Frame):
 
             if self.num_teams > 1:
                 swap_up_command = partial(self.swap_positions, self.num_teams - 1, self.num_teams - 2)
-                up_button = tk.Button(row, text="UP", command=swap_up_command)
+                up_button = tk.Button(row,image=self.up_image, command=swap_up_command)
                 up_button.grid(row=0,column=3)
             if self.num_teams < len(self.standings):
                 swap_down_command = partial(self.swap_positions, self.num_teams - 1, self.num_teams)
-                down_button = tk.Button(row, text="DOWN",command=swap_down_command)
+                down_button = tk.Button(row, image=self.down_image,command=swap_down_command)
                 down_button.grid(row=0,column=4)
 
             delete_entry_command = partial(self.delete_entry, self.num_teams - 1)
-            delete_button = tk.Button(row, text="Delete", command=delete_entry_command)
+            delete_button = tk.Button(row, image=self.delete_image, command=delete_entry_command)
             delete_button.grid(row=0, column=5)
     
     def delete_entry(self,pos):
@@ -127,7 +131,7 @@ class LeagueTable(tk.Frame):
         self.no_changes_state()
         save_file = open(filepath, "w+")
         for line in self.standings:
-            save_file.write(str(line) + "\n")
+            save_file.write(str(line))
         save_file.close()
 
     @staticmethod
