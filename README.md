@@ -10,3 +10,5 @@ These entries are then collated into a leaderboard. Points are added for each po
 In the event of a draw it is decided as follows:
 - user with most correct positions(0 scores)
 - user that predicted correct from top of the table down(e.g first discrepancy between the two)
+
+All icons are made by Pixel perfect from www.flaticon.com
