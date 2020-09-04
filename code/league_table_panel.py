@@ -6,7 +6,7 @@ import os
 from os import path
 
 data_folder = os.path.dirname(__file__) + '/../data'
-filepath = os.path.dirname(__file__) + '/../data/league_table.txt'
+league_path = data_folder + '/local/league_table.txt'
 
 # Draws the current league table to the screen
 class LeagueTable(tk.Frame):
@@ -42,7 +42,7 @@ class LeagueTable(tk.Frame):
 
         self.no_changes_state()
 
-        if path.exists( filepath ):
+        if path.exists( league_path ):
             self.read_standings()
             self.setup_table()
 
@@ -89,7 +89,7 @@ class LeagueTable(tk.Frame):
 
     def read_standings(self):
         self.standings = []
-        with open(filepath, 'r' ) as filedata:
+        with open(league_path, 'r' ) as filedata:
             print( filedata )
             for line in filedata:
                 self.standings.append( line )
@@ -103,7 +103,7 @@ class LeagueTable(tk.Frame):
 
 
     def write_standings(self):
-        file = open( filepath, 'w' )
+        file = open( league_path, 'w' )
         if file:
             for team in self.standings:
                 file.write( team )
