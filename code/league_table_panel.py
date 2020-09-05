@@ -90,9 +90,8 @@ class LeagueTable(tk.Frame):
     def read_standings(self):
         self.standings = []
         with open(league_path, 'r' ) as filedata:
-            print( filedata )
             for line in filedata:
-                self.standings.append( line )
+                self.standings.append( line.rstrip('\n') )
     
     def swap_positions(self, pos1, pos2 ):
         self.changes_made_state()
@@ -100,13 +99,6 @@ class LeagueTable(tk.Frame):
         self.standings[pos1] = self.standings[pos2]
         self.standings[pos2] = copy
         self.setup_table()
-
-
-    def write_standings(self):
-        file = open( league_path, 'w' )
-        if file:
-            for team in self.standings:
-                file.write( team )
 
     def add_team(self):
         self.changes_made_state()
@@ -129,9 +121,9 @@ class LeagueTable(tk.Frame):
 
     def save_changes(self):
         self.no_changes_state()
-        save_file = open(filepath, "w+")
+        save_file = open(league_path, "w+")
         for line in self.standings:
-            save_file.write(str(line))
+            save_file.write(str(line) + '\n')
         save_file.close()
 
     @staticmethod
