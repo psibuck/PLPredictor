@@ -11,8 +11,7 @@ class Standings(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is the Standings Page")
-        label.pack(side="top", fill="x", pady=10)
+        self.draw_standings()
 
     @staticmethod
     def get_name():
@@ -20,7 +19,7 @@ class Standings(tk.Frame):
 
 
     def draw_standings(self):
-        data_location = os.path.dirname(__file__) + '/../data/users/'
+        data_location = os.path.dirname(__file__) + '/../data/local/users/'
         users = []
         for file in glob.glob(os.path.join( data_location, '*.txt' )):
             filename = os.path.basename(file)
@@ -28,21 +27,26 @@ class Standings(tk.Frame):
             new_user.load()
             users.append( new_user )
 
-        league_table = get_league_table()
-
+        count = 0
         for user in users:
-            user.score = 0
-            position = 0
-            for team in user.team_list:
-                league_position = league_table.index( team.rstrip() )
-                user.score = user.score + abs( league_position - position )
-                position = position + 1
+            team_name = tk.Label(self,text=user.name)
+            team_name.grid(row=count,column=0)
+
+            score = tk.Label(self,text=count)
+            score.grid(row=count,column=1)
+            count = count + 1
+        #     user.score = 0
+        #     position = 0
+        #     for team in user.team_list:
+        #         league_position = league_table.index( team.rstrip() )
+        #         user.score = user.score + abs( league_position - position )
+        #         position = position + 1
 
 
-        place = 1
-        users.sort(key=lambda x: x.score, reverse=False)
-        for user in users:
-            spaces = (8 - len( user.name )) * ' '
-            print( '\033[92m' + str(place) + ". "  + user.name + str(spaces) + ": " + str( user.score ) + "pts" )
-            place = place + 1
+        # place = 1
+        # users.sort(key=lambda x: x.score, reverse=False)
+        # for user in users:
+        #     spaces = (8 - len( user.name )) * ' '
+        #     print( '\033[92m' + str(place) + ". "  + user.name + str(spaces) + ": " + str( user.score ) + "pts" )
+        #     place = place + 1
 

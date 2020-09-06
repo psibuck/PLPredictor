@@ -35,7 +35,7 @@ class AddUser(tk.Frame):
             add_team_button = tk.Button(button_frame, text="Add User", command=self.add_user)
             add_team_button.grid(row=0, column=2)  
         else:
-            error_label = tk.Label(text="Cannot add users until you have created a league")
+            error_label = tk.Label(button_frame,text="Cannot add users until you have created a league")
             error_label.grid(row=0, column=1)
 
     def read_standings(self):
